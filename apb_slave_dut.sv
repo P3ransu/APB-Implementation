@@ -1,0 +1,36 @@
+module apb_slave_dut (
+  input  logic        pclk,
+  input  logic        presetn,
+  input  logic [31:0] paddr,
+  input  logic        psel,
+  input  logic        penable,
+  input  logic        pwrite,
+  input  logic [31:0] pwdata,
+  output logic [31:0] prdata,
+  output logic        pready,
+  output logic        pslverr
+);
+
+  logic [31:0] mem [0:255];
+
+  always_ff @(posedge pclk or negedge presetn) begin
+    if (!presetn) begin
+      prdata  <= 32'h0;
+      pready  <= 1'b0;
+      pslverr <= 1'b0;
+      for (int i=0; i<256; i++) mem[i] <= 32'h0;
+    end else begin
+      pready  <= 1'b0;
+      pslverr <= 1'b0;
+      if (psel && !penable) begin
+        pready <= 1'b1;
+      end else if (psel && penable && pready) begin
+        if (pwrite) begin
+          mem[paddr[7:0]] <= pwdata;
+        end else begin
+          prdata <= mem[paddr[7:0]];
+        end
+      end
+    end
+  end
+endmodule
