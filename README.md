@@ -27,7 +27,7 @@ The testbench follows standard UVM hierarchical structuring:
 * **`apb_monitor.sv`**: Passively samples the bus on valid `pready` cycles and broadcasts the observed transaction.
 * **`apb_sequence.sv`**: Generates constrained-random stimulus (e.g., forcing a Write to a random address followed immediately by a Read to the exact same address).
 
-## The Heirarchal Structure 
+## The Heirarchical Structure 
 
 ```text
 ├── src/
